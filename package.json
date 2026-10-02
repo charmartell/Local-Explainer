@@ -7,5 +7,6 @@
   "private": true,
   "scripts": {
     "build:ui": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build_ui.ps1"
-  }
+  },
+  "license": "MIT"
 }

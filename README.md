@@ -95,3 +95,7 @@ $env:PYTHONDONTWRITEBYTECODE = '1'
 The checked-in browser JavaScript is ready to serve. To change the UI, run `npm ci` and `npm run build:ui`. The proof/integration scripts use local inference and create demo artifacts; they are separate from unit tests and never authorize a real lesson.
 
 See [the usage guide](docs/usage.md) for lesson revisions, pause/resume, offline behavior, source handling, library offload, and validation limits. Upstream software and model distributions retain their own licenses; links and pinned assets are documented there and in `dependencies.json`.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE). Third-party software, model weights, and other downloaded assets retain their upstream licenses; this license does not relicense them.

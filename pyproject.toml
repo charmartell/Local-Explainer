@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=75"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,6 +7,8 @@ name = "local-explainer"
 version = "0.1.0"
 description = "Source-grounded lessons and narrated video production on your own computer"
 requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
 dependencies = ["fastapi", "uvicorn", "httpx", "pydantic>=2", "pillow", "playwright", "pypdf", "beautifulsoup4", "jsonschema", "pygments", "imageio-ffmpeg", "ddgs"]
 
 [project.scripts]
