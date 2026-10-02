@@ -36,6 +36,7 @@ if ($comfyCommit -ne '170594057a22673349ddf0a3d88624b7fa5865bb') { throw 'ComfyU
 $env:PLAYWRIGHT_BROWSERS_PATH = Join-Path $assetPath 'Runtime\browsers'
 Invoke-Checked $appPython @('-m','playwright','install','chromium')
 if (-not $SkipModels) { Invoke-Checked $appPython @((Join-Path $repoPath 'scripts\setup_assets.py')) }
+if (-not $SkipModels) { Invoke-Checked $appPython @('-m','explainer.voices') }
 if (-not $SkipSkill) {
     $skillRoot = if ($env:CODEX_HOME) { Join-Path $env:CODEX_HOME 'skills' } else { Join-Path $env:USERPROFILE '.codex\skills' }
     $destination = Join-Path $skillRoot 'local-explainer'

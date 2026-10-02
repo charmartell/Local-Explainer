@@ -195,19 +195,23 @@ class Engine:
         if job['status'] not in ('failed','cancelled','interrupted','approved'): raise ValueError('This lesson does not need resuming')
         return self.submit(job_id,self.produce if job.get('approval') else self.plan)
 
-    def adjust(self,job_id,instruction,scene_id=None):
+    def adjust(self,job_id,instruction,scene_id=None,request_override=None):
         with self.lock:
             old=self.store.get(job_id)
             if old.get('storage_state') == 'offloaded': raise ValueError('Restore this lesson before making an adjustment')
             if old['status'] in ('queued','planning','producing'): raise ValueError('Pause the active job before adjusting it')
+            if scene_id and request_override is not None: raise ValueError('Prompt edits require a whole-lesson revision')
             if scene_id:
                 if old['status']!='complete' or not old.get('approval'): raise ValueError('Scene revisions require a completed, approved lesson')
                 lesson=self.store.read(job_id,'lesson.json')
                 if scene_id not in {s['id'] for s in lesson['scenes']}: raise ValueError('Unknown scene')
-            request={**old['request'],'goal':old['request'].get('goal','')+'\nRequested adjustment: '+instruction}
+            base=request_override if request_override is not None else old['request']
+            request={**base,'goal':base.get('goal','')+'\nRequested adjustment: '+instruction}
             new=self.store.create(request)
             self.store.update(new['id'],revision=old['revision']+1,parent=job_id)
-            self.store.artifact(new['id'],'evidence.json',self.store.read(job_id,'evidence.json'))
+            evidence_path=self.store.folder(job_id)/'evidence.json'
+            if evidence_path.exists() and request.get('inputs')==old['request'].get('inputs') and request.get('mode')==old['request'].get('mode'):
+                self.store.artifact(new['id'],'evidence.json',self.store.read(job_id,'evidence.json'))
             if scene_id:
                 source=self.store.folder(job_id); destination=self.store.folder(new['id'])
                 for file in source.iterdir():

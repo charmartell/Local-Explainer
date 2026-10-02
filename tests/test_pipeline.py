@@ -132,3 +132,30 @@ def test_four_source_kinds_are_captured(config,tmp_path,name,text):
     path=tmp_path/(name+'.md');path.write_text(text)
     result=collect({'topic':name,'inputs':[str(path)],'mode':'offline'},config)
     assert result['passages'][0]['text']==text
+
+def test_prompt_revision_replaces_request_and_refreshes_sources(config,monkeypatch):
+    engine=Engine(config)
+    monkeypatch.setattr(engine,'submit',lambda job_id,action:engine.store.get(job_id))
+    original={'topic':'Original lesson','goal':'Mistaken explanation','inputs':['old.md'],'mode':'offline'}
+    job=engine.store.create(original)
+    engine.store.update(job['id'],status='failed')
+    engine.store.artifact(job['id'],'evidence.json',{'sources':[],'passages':[]})
+    revised=engine.adjust(job['id'],'Explain the corrected example',request_override={**original,'goal':'Correct explanation','inputs':['correct.md']})
+    assert revised['request']['goal']=='Correct explanation\nRequested adjustment: Explain the corrected example'
+    assert revised['request']['inputs']==['correct.md']
+    assert revised['parent']==job['id'] and revised.get('approval') is None
+    assert not (engine.store.folder(revised['id'])/'evidence.json').exists()
+    assert engine.store.get(job['id'])['request']==original
+    with pytest.raises(ValueError,match='whole-lesson'):
+        engine.adjust(job['id'],'Correct it','scene1',original)
+    engine.close()
+
+
+def test_revision_without_evidence_can_replan(config,monkeypatch):
+    engine=Engine(config)
+    monkeypatch.setattr(engine,'submit',lambda job_id,action:engine.store.get(job_id))
+    job=engine.store.create({'topic':'Missing sources','inputs':['missing.md']})
+    engine.store.update(job['id'],status='failed')
+    revised=engine.adjust(job['id'],'Correct the source location')
+    assert revised['parent']==job['id']
+    engine.close()

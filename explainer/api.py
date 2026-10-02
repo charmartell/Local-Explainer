@@ -67,6 +67,7 @@ def make_app(config=None):
         return engine.create(body.model_dump())
     @app.get('/api/voices')
     def voices(): return {'voices':available(config),'default':config.voice}
+    @app.get('/api/voices/{voice}/preview')
     @app.post('/api/voices/{voice}/preview')
     def voice_preview(voice:str): return FileResponse(previews.sample(voice),media_type='audio/wav')
     class Picker(BaseModel): kind:Literal['folder','files']='folder'
@@ -111,8 +112,9 @@ def make_app(config=None):
     class Revision(BaseModel):
         instruction:str=Field(min_length=3,max_length=2000)
         scene_id:str|None=None
+        request:LessonRequest|None=None
     @app.post('/api/jobs/{job_id}/revisions')
-    def revise(job_id:str,body:Revision): return engine.adjust(job_id,body.instruction,body.scene_id)
+    def revise(job_id:str,body:Revision): return engine.adjust(job_id,body.instruction,body.scene_id,body.request.model_dump() if body.request else None)
     @app.get('/api/jobs/{job_id}/evidence')
     def evidence(job_id:str): return engine.store.read(job_id,'evidence.json')
     @app.get('/api/jobs/{job_id}/artifacts/{artifact}')
