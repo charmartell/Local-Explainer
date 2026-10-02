@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-explainer"
+version = "0.1.0"
+description = "Source-grounded lessons and narrated video production on your own computer"
+requires-python = ">=3.12"
+dependencies = ["fastapi", "uvicorn", "httpx", "pydantic>=2", "pillow", "playwright", "pypdf", "beautifulsoup4", "jsonschema", "pygments", "imageio-ffmpeg", "ddgs"]
+
+[project.scripts]
+local-explainer = "explainer.cli:main"
+
+[tool.setuptools.package-data]
+explainer = ["static/*", "schemas/*.json"]
+
+[tool.setuptools.packages.find]
+include = ["explainer*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"

@@ -1,0 +1,86 @@
+[
+  {
+    "url": "https://github.com/ggml-org/llama.cpp/releases/download/b11327/llama-b11327-bin-win-vulkan-x64.zip",
+    "path": "Runtime/llama.zip",
+    "size": 33210755,
+    "sha256": "89d1308941d5a86182395a07f57286da3898a9530246e8f755c26ec71267d4a2"
+  },
+  {
+    "url": "https://huggingface.co/Qwen/Qwen3-8B-GGUF/resolve/7c41481f57cb95916b40956ab2f0b139b296d974/Qwen3-8B-Q4_K_M.gguf",
+    "path": "Models/llm/Qwen3-8B-Q4_K_M.gguf",
+    "size": 5027783488,
+    "sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785"
+  },
+  {
+    "url": "https://huggingface.co/hexgrad/Kokoro-82M/resolve/f3ff3571791e39611d31c381e3a41a3af07b4987/config.json",
+    "path": "Models/kokoro/config.json",
+    "size": 2351,
+    "sha256": "5abb01e2403b072bf03d04fde160443e209d7a0dad49a423be15196b9b43c17f"
+  },
+  {
+    "url": "https://huggingface.co/hexgrad/Kokoro-82M/resolve/f3ff3571791e39611d31c381e3a41a3af07b4987/kokoro-v1_0.pth",
+    "path": "Models/kokoro/kokoro-v1_0.pth",
+    "size": 327212226,
+    "sha256": "496dba118d1a58f5f3db2efc88dbdc216e0483fc89fe6e47ee1f2c53f18ad1e4"
+  },
+  {
+    "url": "https://huggingface.co/hexgrad/Kokoro-82M/resolve/f3ff3571791e39611d31c381e3a41a3af07b4987/voices/af_heart.pt",
+    "path": "Models/kokoro/af_heart.pt",
+    "size": 523425,
+    "sha256": "0ab5709b8ffab19bfd849cd11d98f75b60af7733253ad0d67b12382a102cb4ff"
+  },
+  {
+    "url": "https://huggingface.co/Comfy-Org/flux2-klein-4B/resolve/5f526678002e43af5551dadb73ce2e8c91b43afe/split_files/diffusion_models/flux-2-klein-4b.safetensors",
+    "path": "Models/comfy/diffusion_models/flux-2-klein-4b.safetensors",
+    "size": 7751105712,
+    "sha256": "ec3d4e733a771f61c052fb4856c48b336c55eaf2c65487c2a1faeb9bbda7a343"
+  },
+  {
+    "url": "https://huggingface.co/Comfy-Org/flux2-klein-4B/resolve/5f526678002e43af5551dadb73ce2e8c91b43afe/split_files/text_encoders/qwen_3_4b_fp4_flux2.safetensors",
+    "path": "Models/comfy/text_encoders/qwen_3_4b_fp4_flux2.safetensors",
+    "size": 3848213998,
+    "sha256": "3eab03a77adb0ee5304a4e677d5c10ac22f9049c1d7c894adca4f8bb39206ca8"
+  },
+  {
+    "url": "https://huggingface.co/Comfy-Org/flux2-klein-4B/resolve/5f526678002e43af5551dadb73ce2e8c91b43afe/split_files/vae/flux2-vae.safetensors",
+    "path": "Models/comfy/vae/flux2-vae.safetensors",
+    "size": 336211292,
+    "sha256": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
+  },
+  {
+    "url": "https://huggingface.co/Qwen/Qwen3-VL-4B-Instruct-GGUF/resolve/1cd86afb9a95c410a6038ab3b40d8b578c892266/Qwen3VL-4B-Instruct-Q4_K_M.gguf",
+    "path": "Models/vision/Qwen3VL-4B-Instruct-Q4_K_M.gguf",
+    "size": 2497281664,
+    "sha256": "66358cb18bb6b3b1b6675aa412c7a88ef01d228f481184d13668e5201c730a0a"
+  },
+  {
+    "url": "https://huggingface.co/Qwen/Qwen3-VL-4B-Instruct-GGUF/resolve/1cd86afb9a95c410a6038ab3b40d8b578c892266/mmproj-Qwen3VL-4B-Instruct-Q8_0.gguf",
+    "path": "Models/vision/mmproj-Qwen3VL-4B-Instruct-Q8_0.gguf",
+    "size": 453974304,
+    "sha256": "30ba2c7dd3127a4561b6cba9d13d0f711c91bdb38742e2f56d73c8cb596bd06d"
+  },
+  {
+    "url": "https://huggingface.co/hexgrad/Kokoro-82M/resolve/f3ff3571791e39611d31c381e3a41a3af07b4987/voices/af_bella.pt",
+    "path": "Models/kokoro/af_bella.pt",
+    "size": 523425,
+    "sha256": "8cb64e02fcc8de0327a8e13817e49c76c945ecf0052ceac97d3081480e8e48d6"
+  },
+  {
+    "url": "https://huggingface.co/hexgrad/Kokoro-82M/resolve/f3ff3571791e39611d31c381e3a41a3af07b4987/voices/af_nicole.pt",
+    "path": "Models/kokoro/af_nicole.pt",
+    "size": 523430,
+    "sha256": "c5561808bcf5250fe8c5f5de32caf2d94f27e57e95befdb098c5c85991d4c5da"
+  },
+  {
+    "url": "https://huggingface.co/hexgrad/Kokoro-82M/resolve/f3ff3571791e39611d31c381e3a41a3af07b4987/voices/am_adam.pt",
+    "path": "Models/kokoro/am_adam.pt",
+    "size": 523420,
+    "sha256": "ced7e284aba12472891be1da3ab34db84cc05cc02b5889535796dbf2d8b0cb34"
+  },
+  {
+    "url": "https://huggingface.co/hexgrad/Kokoro-82M/resolve/f3ff3571791e39611d31c381e3a41a3af07b4987/voices/am_michael.pt",
+    "path": "Models/kokoro/am_michael.pt",
+    "size": 523435,
+    "sha256": "9a443b79a4b22489a5b0ab7c651a0bcd1a30bef675c28333f06971abbd47bd37"
+  }
+]

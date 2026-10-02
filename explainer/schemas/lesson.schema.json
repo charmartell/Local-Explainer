@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:local-explainer:lesson:1.0",
+  "title": "Local Explainer authored lesson",
+  "description": "Initial authored content contract. The application separately verifies cross references, source support, outline approval, and rendering constraints. Runtime timing and paths belong to separate artifacts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "lesson_id", "approved_outline_hash", "title", "learning_outcomes", "audience", "style", "chapters", "claims", "scenes", "glossary"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "lesson_id": {"$ref": "#/$defs/id"},
+    "approved_outline_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "title": {"type": "string", "minLength": 1, "maxLength": 120},
+    "learning_outcomes": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"type": "string", "minLength": 1}},
+    "audience": {"type": "string", "minLength": 1},
+    "style": {
+      "type": "object", "additionalProperties": false,
+      "required": ["theme_id", "illustration_direction", "language"],
+      "properties": {
+        "theme_id": {"$ref": "#/$defs/id"},
+        "illustration_direction": {"type": "string"},
+        "language": {"type": "string", "pattern": "^[a-z]{2,3}-[A-Z]{2}$"}
+      }
+    },
+    "chapters": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "title", "outline_beat_id"],
+        "properties": {"id": {"$ref": "#/$defs/id"}, "title": {"type": "string"}, "outline_beat_id": {"$ref": "#/$defs/id"}}
+      }
+    },
+    "claims": {
+      "type": "array", "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "statement", "kind", "evidence", "qualification"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "statement": {"type": "string", "minLength": 1},
+          "kind": {"enum": ["observed_implementation", "documented_behavior", "general_example", "inference"]},
+          "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidence_ref"}},
+          "qualification": {"type": "string", "description": "Required explanatory qualification for an inference; empty for an unqualified supported claim."}
+        },
+        "allOf": [{"if": {"properties": {"kind": {"const": "inference"}}}, "then": {"properties": {"qualification": {"minLength": 1}}}}]
+      }
+    },
+    "scenes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/scene"}},
+    "glossary": {
+      "type": "array", "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["term", "definition", "speech_form"],
+        "properties": {"term": {"type": "string"}, "definition": {"type": "string"}, "speech_form": {"type": "string"}}
+      }
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{0,63}$"},
+    "evidence_ref": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "evidence_id"],
+      "properties": {"source_id": {"$ref": "#/$defs/id"}, "evidence_id": {"$ref": "#/$defs/id"}}
+    },
+    "narration": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "text", "speech_text", "claim_ids"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "text": {"type": "string", "minLength": 1},
+        "speech_text": {"type": "string", "minLength": 1, "description": "Pronunciation-normalized equivalent of text, with matching meaning."},
+        "claim_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}
+      }
+    },
+    "element": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "label", "role"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "label": {"type": "string"}, "role": {"type": "string"}}
+    },
+    "edge": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "from", "to", "label", "claim_ids"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "from": {"$ref": "#/$defs/id"}, "to": {"$ref": "#/$defs/id"},
+        "label": {"type": "string"}, "claim_ids": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/id"}}
+      }
+    },
+    "visual": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["type", "nodes", "edges"],
+          "properties": {
+            "type": {"enum": ["diagram", "sequence", "state"]},
+            "nodes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/element"}},
+            "edges": {"type": "array", "items": {"$ref": "#/$defs/edge"}}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["type", "source_id", "evidence_id", "language", "display_path", "start_line", "code", "regions"],
+          "properties": {
+            "type": {"const": "code"}, "source_id": {"$ref": "#/$defs/id"}, "evidence_id": {"$ref": "#/$defs/id"},
+            "language": {"type": "string"}, "display_path": {"type": "string"},
+            "start_line": {"type": "integer", "minimum": 1}, "code": {"type": "string", "minLength": 1},
+            "regions": {"type": "array", "items": {
+              "type": "object", "additionalProperties": false, "required": ["id", "start_offset", "end_offset"],
+              "properties": {
+                "id": {"$ref": "#/$defs/id"},
+                "start_offset": {"type": "integer", "minimum": 0},
+                "end_offset": {"type": "integer", "minimum": 1}
+              },
+              "description": "Zero-based Unicode code-point offsets into code, with exclusive end. Application validates nonempty bounds; JavaScript must account for UTF-16 indexing."
+            }}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["type", "columns", "rows"],
+          "properties": {
+            "type": {"enum": ["table", "comparison"]},
+            "columns": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+            "rows": {"type": "array", "items": {
+              "type": "object", "additionalProperties": false, "required": ["id", "cells", "claim_ids"],
+              "properties": {"id": {"$ref": "#/$defs/id"}, "cells": {"type": "array", "items": {"type": "string"}}, "claim_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}}}
+            }}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["type", "prompt", "reference_asset_ids", "overlay_labels"],
+          "properties": {
+            "type": {"const": "illustration"}, "prompt": {"type": "string", "minLength": 1},
+            "reference_asset_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}},
+            "overlay_labels": {"type": "array", "items": {"$ref": "#/$defs/element"}}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["type", "entries"],
+          "properties": {"type": {"const": "recap"}, "entries": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/element"}}}
+        }
+      ]
+    },
+    "cue": {
+      "type": "object", "additionalProperties": false,
+      "required": ["segment_id", "phrase", "action", "target_id"],
+      "properties": {
+        "segment_id": {"$ref": "#/$defs/id"},
+        "phrase": {"type": "string", "minLength": 1, "description": "Exact phrase in the display narration. Application resolves timing from sentence boundaries or alignment."},
+        "action": {"enum": ["reveal", "highlight", "trace", "zoom", "deemphasize"]},
+        "target_id": {"$ref": "#/$defs/id"}
+      }
+    },
+    "scene": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "chapter_id", "title", "teaching_goal", "narration", "visual", "cues"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "chapter_id": {"$ref": "#/$defs/id"},
+        "title": {"type": "string"}, "teaching_goal": {"type": "string", "minLength": 1},
+        "narration": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/narration"}},
+        "visual": {"$ref": "#/$defs/visual"}, "cues": {"type": "array", "items": {"$ref": "#/$defs/cue"}}
+      }
+    }
+  }
+}

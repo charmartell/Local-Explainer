@@ -1,0 +1,4 @@
+interface:
+  display_name: "Local Explainer"
+  short_description: "Make source-grounded learning videos locally"
+  default_prompt: "Use $local-explainer to create a local learning video from this concept, repository, design, or process."

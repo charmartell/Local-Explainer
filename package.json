@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  },
+  "name": "local-explainer-ui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build:ui": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build_ui.ps1"
+  }
+}
