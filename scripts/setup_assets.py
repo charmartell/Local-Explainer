@@ -10,8 +10,10 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-ROOT = Path(os.environ.get('LOCAL_EXPLAINER_ASSETS', r'C:\Dev\_assets\Local-Explainer'))
-SCRATCH = Path(os.environ.get('LOCAL_EXPLAINER_SCRATCH', r'C:\Dev\_scratch\Local-Explainer')) / 'setup'
+from explainer.config import storage_path
+
+ROOT = storage_path('assets')
+SCRATCH = storage_path('scratch') / 'setup'
 
 def download(url, destination, expected=None):
     destination = Path(destination)

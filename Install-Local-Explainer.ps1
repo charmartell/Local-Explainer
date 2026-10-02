@@ -4,8 +4,7 @@ $ErrorActionPreference = 'Stop'
 $env:PYTHONUTF8 = '1'
 $env:PYTHONDONTWRITEBYTECODE = '1'
 $repoPath = $PSScriptRoot
-$assetPath = if ($env:LOCAL_EXPLAINER_ASSETS) { $env:LOCAL_EXPLAINER_ASSETS } else { 'C:\Dev\_assets\Local-Explainer' }
-$scratchPath = if ($env:LOCAL_EXPLAINER_SCRATCH) { $env:LOCAL_EXPLAINER_SCRATCH } else { 'C:\Dev\_scratch\Local-Explainer' }
+. (Join-Path $repoPath 'scripts\paths.ps1')
 New-Item -ItemType Directory -Force -Path $assetPath, $scratchPath | Out-Null
 $env:UV_CACHE_DIR = Join-Path $scratchPath 'uv-cache'
 $env:TEMP = Join-Path $scratchPath 'setup-temp'
@@ -25,7 +24,7 @@ $inferencePython = Join-Path $inferenceEnv 'Scripts\python.exe'
 Invoke-Checked 'uv' @('pip','install','--python',$appPython,'-r',(Join-Path $repoPath 'requirements-app.lock'))
 Invoke-Checked 'uv' @('pip','install','--python',$appPython,'--no-deps','--editable',$repoPath)
 Invoke-Checked 'uv' @('pip','install','--python',$inferencePython,'-r',(Join-Path $repoPath 'requirements-inference.lock'),'--extra-index-url','https://download.pytorch.org/whl/cu130','--index-strategy','unsafe-best-match')
-$comfyPath = 'C:\Dev\ComfyUI-Local-Explainer'
+$comfyPath = $comfyRepoPath
 if (-not (Test-Path -LiteralPath (Join-Path $comfyPath '.git'))) {
     if (Test-Path -LiteralPath $comfyPath) { throw "An existing non-Git folder occupies $comfyPath. Choose another path before installing." }
     Invoke-Checked 'git' @('clone','https://github.com/Comfy-Org/ComfyUI.git',$comfyPath)

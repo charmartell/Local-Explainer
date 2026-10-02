@@ -1,8 +1,8 @@
 $ErrorActionPreference = 'Stop'
 $env:PYTHONUTF8 = '1'
 $env:PYTHONDONTWRITEBYTECODE = '1'
-$assetPath = if ($env:LOCAL_EXPLAINER_ASSETS) { $env:LOCAL_EXPLAINER_ASSETS } else { 'C:\Dev\_assets\Local-Explainer' }
-$scratchPath = if ($env:LOCAL_EXPLAINER_SCRATCH) { $env:LOCAL_EXPLAINER_SCRATCH } else { 'C:\Dev\_scratch\Local-Explainer' }
+$repoPath = $PSScriptRoot
+. (Join-Path $repoPath 'scripts\paths.ps1')
 $appPython = Join-Path $assetPath 'Runtime\app\Scripts\python.exe'
 if (-not (Test-Path -LiteralPath $appPython)) { throw 'Run Install-Local-Explainer.ps1 first.' }
 Set-Location -LiteralPath $PSScriptRoot

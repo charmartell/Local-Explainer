@@ -11,3 +11,6 @@ dist/
 !.env.example
 *.pem
 *.key
+
+data/
+.local-paths.json

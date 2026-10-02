@@ -5,15 +5,15 @@ description: Create source-grounded narrated learning videos locally from a conc
 
 # Local Explainer
 
-The application is installed at `C:\Dev\Local-Explainer`. Its independent browser UI runs at `http://127.0.0.1:8090`. Generation uses local language, vision, image, and speech models. Codex coordinates the application; the browser application also works without Codex.
+Locate the checkout through `LOCAL_EXPLAINER_REPO`, or ask for its path if unknown. Its independent browser UI runs at `http://127.0.0.1:8090`. Generation uses local language, vision, image, and speech models. Codex coordinates the application; the browser application also works without Codex.
 
 ## Start and inspect
 
-Run `C:\Dev\Local-Explainer\Start-Local-Explainer.ps1` to start the application and open its UI. Use `scripts\invoke.ps1` in this skill for structured localhost API operations. It returns JSON immediately; planning and production run asynchronously. Check status while continuing useful work. Preserve the application's single GPU queue.
+Run `Start-Local-Explainer.ps1` from that checkout to start the application and open its UI. Use `scripts\invoke.ps1` in this skill for structured localhost API operations. It returns JSON immediately; planning and production run asynchronously. Check status while continuing useful work. Preserve the application's single GPU queue.
 
 ## Create a lesson
 
-Prepare a request JSON under `C:\Dev\_scratch\Local-Explainer\requests` with `topic`, `inputs` (absolute file/folder paths or reference URLs), `goal`, `audience`, `minutes` (1–20), and `mode` (`offline` or `research`). Default to offline for local sources; choose research when the user requests outside research or a concept needs references. Research mode sends the topic as a search query and fetches public pages. Inference stays local.
+Prepare a request JSON under the configured scratch directory's `requests` subfolder (see the checkout README) with `topic`, `inputs` (absolute file/folder paths or reference URLs), `goal`, `audience`, `minutes` (1–20), and `mode` (`offline` or `research`). Default to offline for local sources; choose research when the user requests outside research or a concept needs references. Research mode sends the topic as a search query and fetches public pages. Inference stays local.
 
 Call `invoke.ps1 -Action plan -RequestFile <absolute path>`. Poll status until `awaiting_approval` or `failed`. Present only the brief outline, visual direction, and material gaps. The user can review and approve in the application.
 

@@ -1,0 +1,6 @@
+{
+  "assets": "<absolute assets folder>",
+  "scratch": "<absolute scratch folder>",
+  "builds": "<absolute builds folder>",
+  "comfy_repo": "<absolute ComfyUI checkout folder>"
+}

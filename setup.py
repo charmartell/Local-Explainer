@@ -5,7 +5,11 @@ from setuptools import setup
 from setuptools.command.egg_info import egg_info
 from setuptools.command.build_py import build_py
 
-root=Path(os.environ.get('LOCAL_EXPLAINER_SCRATCH',r'C:\Dev\_scratch\Local-Explainer'))/'packaging'
+import json
+repo = Path(__file__).resolve().parent
+local_file = repo/'.local-paths.json'
+local = json.loads(local_file.read_text(encoding='utf-8-sig')) if local_file.exists() else {}
+root=Path(os.environ.get('LOCAL_EXPLAINER_SCRATCH',local.get('scratch',str(repo/'data'/'scratch'))))/'packaging'
 root.mkdir(parents=True,exist_ok=True)
 
 class ScratchEggInfo(egg_info):

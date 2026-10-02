@@ -1,18 +1,33 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import json
 import os
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 
+def storage_path(name):
+    variables = {'assets': 'ASSETS', 'scratch': 'SCRATCH', 'builds': 'BUILDS', 'comfy_repo': 'COMFY_REPO'}
+    override = os.environ.get('LOCAL_EXPLAINER_' + variables[name])
+    if override:
+        return Path(override).expanduser().resolve()
+    local_file = REPO / '.local-paths.json'
+    local = json.loads(local_file.read_text(encoding='utf-8-sig')) if local_file.exists() else {}
+    if name in local:
+        return Path(local[name]).expanduser().resolve()
+    defaults = {'assets': REPO/'data'/'assets', 'scratch': REPO/'data'/'scratch',
+                'builds': REPO/'data'/'builds', 'comfy_repo': REPO/'data'/'assets'/'Runtime'/'ComfyUI'}
+    if name == 'comfy_repo':
+        return storage_path('assets')/'Runtime'/'ComfyUI'
+    return defaults[name]
+
 @dataclass
 class Settings:
-    assets: Path = Path(os.environ.get('LOCAL_EXPLAINER_ASSETS', r'C:\Dev\_assets\Local-Explainer'))
-    scratch: Path = Path(os.environ.get('LOCAL_EXPLAINER_SCRATCH', r'C:\Dev\_scratch\Local-Explainer'))
-    builds: Path = Path(os.environ.get('LOCAL_EXPLAINER_BUILDS', r'C:\Dev\_builds\Local-Explainer'))
+    assets: Path = field(default_factory=lambda: storage_path("assets"))
+    scratch: Path = field(default_factory=lambda: storage_path("scratch"))
+    builds: Path = field(default_factory=lambda: storage_path("builds"))
     llama_url: str = 'http://127.0.0.1:8091'
     comfy_url: str = 'http://127.0.0.1:8092'
-    comfy_repo: Path = Path(r'C:\Dev\ComfyUI-Local-Explainer')
+    comfy_repo: Path = field(default_factory=lambda: storage_path("comfy_repo"))
     voice: str = 'af_heart'
     search_url: str = ''
 
